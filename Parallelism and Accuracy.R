@@ -58,6 +58,19 @@ p.test.plot <- ggplot(test.par, aes(Standard.Concentration)) +
 
 print(p.test.plot)
 
+#stats
+test.long <- test.par %>%
+  drop_na %>%
+  pivot_longer("X.Bound.Standards":"X.Bound.Dilutions",
+    names_to = "Type",
+    values_to = "Value"
+  )
+
+var.test(Value ~ Type, data = test.long)
+#reject the null hypothesis
+#two population variances are not equal
+
+
 
 #Progesterone
 
@@ -105,6 +118,19 @@ p.prog.plot <- ggplot(prog.par, aes(Standard.Concentration)) +
 print(p.prog.plot)
 
 
+#stats
+prog.long <- prog.par %>%
+  drop_na %>%
+  pivot_longer("X.Bound.Standards":"X.Bound.Dilutions",
+               names_to = "Type",
+               values_to = "Value"
+  )
+
+var.test(Value ~ Type, data = prog.long)
+#accept the null hypothesis
+#two population variances are equal
+
+
 #Estradiol
 
 est.par <- data.frame("Standard Concentration" = c(29.3, 117.2, 468.8, 1875, 7500, 30000, 120000), 
@@ -147,8 +173,19 @@ p.est.plot <- ggplot(est.par, aes(Standard.Concentration)) +
 
 print(p.est.plot)
 
+#stats
+est.long <- est.par %>%
+  drop_na %>%
+  pivot_longer("X.Bound.Standards":"X.Bound.Dilutions",
+               names_to = "Type",
+               values_to = "Value"
+  )
 
+var.test(Value ~ Type, data = est.long)
+#reject the null hypothesis
+#two population variances are not equal
 
+ 
 
 
 #put parallelism plots together
