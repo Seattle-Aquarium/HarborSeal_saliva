@@ -5,7 +5,7 @@
 library(here)
 library(cowplot)
 library(tidyverse)
-# library(scales)
+library(scales)
 
 #check to see that here() leads to root directory or top-level folder
 here()
@@ -30,7 +30,7 @@ p.test.plot <- ggplot(test.par, aes(Standard.Concentration)) +
   geom_point(aes(y=X.Bound.Standards)) +
   geom_line(aes(y=X.Bound.Dilutions), col = "gray33", linetype = "dashed", size = 0.8) +
   geom_point(aes(y=X.Bound.Dilutions)) +
-  labs (x = "Testosterone (ng/mL)", y = "Percent Label Bound") +
+  labs (x = "Testosterone (ng/mL)", y = "Percent label bound") +
   theme_bw(base_size = 10) +
   scale_x_continuous(trans = "log10", labels = function(l) ifelse(l <= 9999, l, comma(l))) +
   scale_y_continuous(limits = c(0,100)) +
@@ -50,11 +50,11 @@ p.test.plot <- ggplot(test.par, aes(Standard.Concentration)) +
            size = 3, color = "black") +
   annotate("text", label = "1:64", x = 10, y = 95,
            size = 3, color = "black") +
-  geom_hline(yintercept = 50, linetype = "dashed", color = "red", size = 0.8)+
+  geom_hline(yintercept = 50, linetype = "dashed", color = "grey10", size = 0.8) +
   theme(panel.border = element_rect(color = "black", fill = NA),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
-  ggtitle("Testosterone Assay Parallelism")
+  ggtitle("Testosterone assay parallelism")
 
 print(p.test.plot)
 
@@ -83,7 +83,7 @@ p.prog.plot <- ggplot(prog.par, aes(Standard.Concentration)) +
   geom_point(aes(y=X.Bound.Standards)) +
   geom_line(aes(y=X.Bound.Dilutions), col = "gray33", linetype = "dashed", size = 0.8) +
   geom_point(aes(y=X.Bound.Dilutions)) +
-  labs (x = "Progesterone (ng/mL)", y = "Percent Label Bound") +
+  labs (x = "Progesterone (ng/mL)", y = "Percent label bound") +
   theme_bw(base_size = 10) +
   scale_x_continuous(trans = "log10") +
                      
@@ -106,13 +106,13 @@ p.prog.plot <- ggplot(prog.par, aes(Standard.Concentration)) +
            size = 3, color = "black") +
   annotate("text", label = "1:64", x = 20, y = 105,
            size = 3, color = "black") +
-  geom_hline(yintercept = 50, linetype = "dashed", color = "red", size = 0.8) +
+  geom_hline(yintercept = 50, linetype = "dashed", color = "grey10", size = 0.8) +
   theme(panel.border = element_rect(color = "black", fill = NA),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.title.x = element_text(size = 10),
         axis.text.x = element_text(size = 5.3)) +
-  ggtitle("Progesterone Assay Parallelism")
+  ggtitle("Progesterone assay parallelism")
 
 
 print(p.prog.plot)
@@ -142,7 +142,7 @@ p.est.plot <- ggplot(est.par, aes(Standard.Concentration)) +
   geom_point(aes(y=X.Bound.Standards)) +
   geom_line(aes(y=X.Bound.Dilutions), col = "gray33", linetype = "dashed", size = 0.8) +
   geom_point(aes(y=X.Bound.Dilutions)) +
-  labs (x = "Estradiol (ng/mL)", y = "Percent Label Bound") +
+  labs (x = "Estradiol (ng/mL)", y = "Percent label bound") +
   theme_bw(base_size = 10) +
   scale_x_continuous(trans = "log10", labels = c(10, 100, 1000, "10,000", "100,000", "1,000,000"), breaks = c(10, 100, 1000, 10000, 100000, 1000000)) +
   scale_y_continuous(limits = c(0,120)) +
@@ -162,13 +162,13 @@ p.est.plot <- ggplot(est.par, aes(Standard.Concentration)) +
            size = 3, color = "black") +
   annotate("text", label = "1:64", x = 40, y = 103,
            size = 3, color = "black") +
-  geom_hline(yintercept = 50, linetype = "dashed", color = "red", size = 0.8) +
+  geom_hline(yintercept = 50, linetype = "dashed", color = "grey10", size = 0.8) +
   theme(panel.border = element_rect(color = "black", fill = NA),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.title.x = element_text(size = 10),
         axis.text.x = element_text(size = 5.3)) +
-  ggtitle("Estradiol Assay Parallelism")
+  ggtitle("Estradiol assay parallelism")
 
 
 print(p.est.plot)
@@ -200,7 +200,7 @@ windows(8,6, record=T)
 
 print(p.plots)
 
-ggsave(here("output", "Parallelism with labels.png"))
+ggsave(here("output", "Parallelism with labels black.png"))
 
 
 
@@ -218,7 +218,7 @@ pro.acc <- data.frame("Standard Expected" = c(1000, 250, 125, 62.5, 31.25, 7.81)
 
 a.pro.plot <- ggplot(pro.acc) +
   geom_point(aes(x = Standard.Expected, y = Standard.Observed)) +
-  labs (x = "Standard Expected (ng/mL)", y = "Standard Observed (ng/mL)") +
+  labs (x = "Standard expected (ng/mL)", y = "Standard observed (ng/mL)") +
   theme_bw(base_size = 10) +
   # scale_x_continuous(trans = "log10") +
   # scale_y_continuous(limits = c(0,100)) +
@@ -227,7 +227,7 @@ a.pro.plot <- ggplot(pro.acc) +
         panel.grid.minor = element_blank()) +
   geom_smooth(method = lm, se = FALSE, aes(x = Standard.Expected, y = Standard.Observed),
               colour = "grey30", linetype = "dashed")+
-  ggtitle("Progesterone Assay Accuracy")
+  ggtitle("Progesterone assay accuracy")
 
 lm_eqn <- function(est.acc){
   m <- lm(Standard.Observed ~ Standard.Expected, pro.acc);
