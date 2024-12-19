@@ -18,7 +18,7 @@ here()
 rm(list = ls())
 
 #import data
-data <- read_excel(here("data", "Progesterone data.xlsx"))
+data <- read_excel(here("input", "Progesterone data_birthdate.xlsx"))
 
 ################################
 # Stats
@@ -30,6 +30,11 @@ data %>%
 
 #rename P column
 colnames(data)[4] <- "Progesterone"
+
+#change character string to numeric
+data$Progesterone <- as.numeric(data$Progesterone)
+
+
 
 #summary stats 
 data %>%
@@ -51,6 +56,11 @@ f1 <- data %>%
 f1 <- f1 %>% 
   mutate(f1, Date = as.Date(Date, format = "%Y"))
 
+f1.implantation<- as.Date("2012-09-01")
+f1.birth <- as.Date("2013-06-10")
+f1.postbirth <- as.Date("2013-06-11")
+f1.end <- as.Date("2013-11-04")
+
 #F1 plot
 f1.plot <- ggplot(f1, aes(x = Date)) +
   geom_line(aes(y = Progesterone), lty = 1, alpha = 0.7) +
@@ -58,8 +68,16 @@ f1.plot <- ggplot(f1, aes(x = Date)) +
   labs(title = "F1 Profile", y = "Progesterone (pg/ml)") +
   theme_bw() +
   scale_y_continuous(expand = c(0,0), limits = c(0, 600)) +
-  scale_x_date(date_labels = "%m/%Y") 
+  scale_x_date(date_labels = "%m/%Y") +
+  geom_segment(aes(x = f1.implantation, y = 184, xend = f1.birth, yend = 184)) +
+  geom_segment(aes(x = f1.implantation, y = 184+89, xend = f1.birth, yend = 184+89), linetype = 2) +
+  geom_segment(aes(x = f1.implantation, y = 184-89, xend = f1.birth, yend = 184-89), linetype = 2) +
+  geom_segment(aes(x = f1.postbirth, y = 166, xend = f1.end, yend = 166)) +
+  geom_segment(aes(x = f1.postbirth, y = 166+169, xend = f1.end, yend = 166+169), linetype = 2) +
+  geom_segment(aes(x = f1.postbirth, y = 166-169, xend = f1.end, yend = 166-169), linetype = 2) 
+  
 
+  
 #add labels and arrows
 f1.plot <- f1.plot +
   annotate("text", x = as.Date("2012-09-5"), y = 500, label = "Implantation", fontface = "bold", size = 4.5) +
@@ -78,7 +96,7 @@ windows(8,6, record=T)
 
 print(f1.plot)
 
-ggsave(here("output", "F1 profile black.png"))
+ggsave(here("output", "F1 profile black with means.png"))
 
 
 ##################################
@@ -91,6 +109,9 @@ f2 <- data %>%
 f2 <- f2 %>% 
   mutate(f2, Date = as.Date(Date, format = "%Y"))
 
+f2.implantation<- as.Date("2014-08-01")
+f2.birth <- as.Date("2015-05-31")
+
 #F2 plot
 f2.plot <- ggplot(f2, aes(x = Date)) +
   geom_line(aes(y = Progesterone), lty = 1, alpha = 0.7) +
@@ -98,7 +119,10 @@ f2.plot <- ggplot(f2, aes(x = Date)) +
   labs(title = "F2 Profile", y = "Progesterone (pg/ml)") +
   theme_bw() +
   scale_y_continuous(expand = c(0,0), limits = c(0, 800)) +
-  scale_x_date(date_labels = "%m/%Y") 
+  scale_x_date(date_labels = "%m/%Y") +
+  geom_segment(aes(x = f2.implantation, y = 180, xend = f2.birth, yend = 180)) +
+  geom_segment(aes(x = f2.implantation, y = 180+98, xend = f2.birth, yend = 180+98), linetype = 2) +
+  geom_segment(aes(x = f2.implantation, y = 180-98, xend = f2.birth, yend = 180-90), linetype = 2) 
 
 #add labels and arrows
 f2.plot <- f2.plot +
@@ -118,40 +142,8 @@ windows(8,6, record=T)
 
 print(f2.plot)
 
-ggsave(here("output", "F2 profile black.png"))
+ggsave(here("output", "F2 profile black with mean.png"))
 
-
-#plot of both profiles together
-both.plot <- ggplot(data, aes(x = Date)) +
-  geom_line(aes(y = Progesterone, color = ID), lty = 1, alpha = 0.7) +
-  geom_point(aes(y = Progesterone, color = ID), shape = 16, alpha = 0.5) +
-  labs(title = "Pregnant Harbor Seal Profiles", y = "Progesterone (pg/ml)") +
-  theme_bw() +
-  scale_y_continuous(expand = c(0,0), limits = c(0, 800)) 
-  #scale_x_date(date_labels = "%m/%Y") 
-
-
-# creating date_1 variable 
-# and storing date in it.
-date_1<-as.Date("2020-10-10")
-
-# creating date_2 variable
-# and storing date in it.
-date_2<-as.Date("2020-10-11")
-
-a = seq(from = date_1, to = date_2, by = 'day')
-
-# Here we are finding length of 
-# a and we are subtracting 1 because
-# we dont need to include current day.
-length(a)-1
-
-#pull out dates
-dates <- data$Date
-birthdate1 <- "2013-06-10"
-
-data <- data %>%
-  mutate(seq(from = dates, to = birthdate1, by = 'day'))
 
 
 ####################
